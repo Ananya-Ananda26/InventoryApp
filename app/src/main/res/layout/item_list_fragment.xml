@@ -79,6 +79,7 @@
         android:id="@+id/floatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tooltipText ="Create new task"
         android:layout_marginEnd="@dimen/margin_between_elements"
         android:layout_marginBottom="@dimen/margin_between_elements"
         android:contentDescription="@string/add_new_item"

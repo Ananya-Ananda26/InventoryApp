@@ -1,29 +1,13 @@
-/*
- * Copyright (C) 2021 The Android Open Source Project.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.inventory
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import com.example.inventory.data.Item
 import com.example.inventory.data.ItemDao
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
+
 
 /**
  * View Model to keep a reference to the Inventory repository and an up-to-date list of all items.
@@ -42,7 +26,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
         itemId: Int,
         itemName: String,
         itemPrice: String,
-        itemCount: String
+        itemCount: Long
     ) {
         val updatedItem = getUpdatedItemEntry(itemId, itemName, itemPrice, itemCount)
         updateItem(updatedItem)
@@ -61,7 +45,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
     /**
      * Inserts the new Item into database.
      */
-    fun addNewItem(itemName: String, itemDesc: String, itemDate: String) {
+    fun addNewItem(itemName: String, itemDesc: String, itemDate: Long) {
         val newItem = getNewItemEntry(itemName, itemDesc, itemDate)
         insertItem(newItem)
     }
@@ -94,19 +78,30 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
     /**
      * Returns true if the EditTexts are not empty
      */
-    fun isEntryValid(itemName: String, itemPrice: String, itemCount: String): Boolean {
-        if (itemName.isBlank() || itemPrice.isBlank() || itemCount.isBlank()) {
-//            itemName.setError("Enter a task name")
-            return false
+    fun isEntryValid(itemName: TextInputEditText, itemDesc: TextInputEditText): Boolean {
+        var retVal = true
+        if(itemName.text.toString().isBlank()) {
+//            Log.d("debug", "Something ${itemName.parent.parent}")
+//            til= "some error.."
+            itemName.error = "Please enter name"
+            retVal = false
         }
-        return true
+        if(itemDesc.text.toString().isBlank()) {
+            itemDesc.error = "Please enter description"
+            retVal = false
+        }
+//        if(itemDate.text.toString().isBlank()) {
+//            itemDate.error = "Please enter due date"
+//            retVal = false
+//        }
+        return retVal
     }
 
     /**
      * Returns an instance of the [Item] entity class with the item info entered by the user.
      * This will be used to add a new entry to the Inventory database.
      */
-    private fun getNewItemEntry(itemName: String, itemDesc: String, itemDate: String): Item {
+    private fun getNewItemEntry(itemName: String, itemDesc: String, itemDate: Long): Item {
         return Item(
             itemName = itemName,
             itemDesc = itemDesc,
@@ -122,7 +117,7 @@ class InventoryViewModel(private val itemDao: ItemDao) : ViewModel() {
         itemId: Int,
         itemName: String,
         itemDesc: String,
-        itemDate: String
+        itemDate: Long
     ): Item {
         return Item(
             id = itemId,
@@ -145,4 +140,3 @@ class InventoryViewModelFactory(private val itemDao: ItemDao) : ViewModelProvide
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
-

@@ -29,7 +29,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.inventory.data.Item
 import com.example.inventory.databinding.FragmentAddItemBinding
+import java.text.SimpleDateFormat
 import java.util.*
+
 
 /**
  * Fragment to add or update an item in the Inventory database.
@@ -65,38 +67,53 @@ class AddItemFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupDatePicker(itemDate: String) {
-        val today = Calendar.getInstance()
-        if(itemDate.isBlank()) {
-            binding.datePicker.init(
-                today.get(Calendar.YEAR),
-                today.get(Calendar.MONTH),
-                today.get(Calendar.DAY_OF_MONTH)
-            ) { view, year, monthOfYear, dayOfMonth ->
-                val month = monthOfYear + 1
-                val msg = "Selected Date is $month/$dayOfMonth/$year"
-                Log.d("Debug", " Today's date: $msg")
+    private fun setupDatePicker(itemDate: Long) {
+        val cal = Calendar.getInstance()
+        if(itemDate == null) {
+        binding.datePicker.init(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ) { view, year, monthOfYear, dayOfMonth ->
+            val month = monthOfYear
+            val msg = "${month+1}/$dayOfMonth/$year"
+            Log.d("Debug", " Today's date: $msg ${cal.timeInMillis}")
         }
         }else{
+            val simpleDateFormat = SimpleDateFormat("yyyy,MM,dd")
+            val dateString = simpleDateFormat.format(itemDate)
+            val list: List<String> = dateString.split(",").toList()
+            Log.d("Debug", "SimpleDateFormat Millis $list, ${list[0]}")
+            Log.d("Debug", String.format("SimpleDateFormat: %s", dateString))
             binding.datePicker.init(
-                2022, 6, 11
+                list[0].toInt(),
+                list[1].toInt()-1,
+                list[2].toInt()
             ) { view, year, monthOfYear, dayOfMonth ->
-                val month = monthOfYear + 1
-                val msg = "Selected Date is $month/$dayOfMonth/$year"
-                Log.d("Debug", "Set date: $msg")
+                val month = monthOfYear
+                cal.set(year, month, dayOfMonth)
+                val msg = "Selected Date is ${month+1}/$dayOfMonth/$year"
+                Log.d("Debug", " $msg ${cal.timeInMillis}")
+                formatDate(cal.timeInMillis)
             }
         }
     }
 
+    private fun formatDate(millis : Long): String{
+        val simpleDateFormat = SimpleDateFormat("MM/dd")
+        val dateString = simpleDateFormat.format(millis)
+        Log.d("Debug", String.format("Date format: %s", dateString))
+        return dateString
+
+    }
 
     /**
      * Returns true if the EditTexts are not empty
      */
     private fun isEntryValid(): Boolean {
         return viewModel.isEntryValid(
-            binding.itemName.text.toString(),
-            binding.itemDesc.text.toString(),
-            binding.itemDate.text.toString(),
+            binding.itemName,
+            binding.itemDesc,
         )
     }
 
@@ -108,7 +125,7 @@ class AddItemFragment : Fragment() {
         binding.apply {
             itemName.setText(item.itemName, TextView.BufferType.SPANNABLE)
             itemDesc.setText(item.itemDesc, TextView.BufferType.SPANNABLE)
-            itemDate.setText(item.itemDate, TextView.BufferType.SPANNABLE)
+//            itemDate.setText(formatDate(item.itemDate), TextView.BufferType.SPANNABLE)
 //            Log.d("Debug", "$datePicker")
             saveAction.setOnClickListener { updateItem() }
         }
@@ -122,13 +139,21 @@ class AddItemFragment : Fragment() {
             viewModel.addNewItem(
                 binding.itemName.text.toString(),
                 binding.itemDesc.text.toString(),
-                binding.itemDate.text.toString(),
+                getDateInMillis(),
             )
             val action = AddItemFragmentDirections.actionAddItemFragmentToItemListFragment()
             findNavController().navigate(action)
         }
     }
 
+    private fun getDateInMillis():Long{
+        val cal = Calendar.getInstance()
+        val day = binding.datePicker.dayOfMonth
+        val month = binding.datePicker.month
+        val year = binding.datePicker.year
+        cal.set(year,month,day)
+        return cal.timeInMillis
+    }
     /**
      * Updates an existing Item in the database and navigates up to list fragment.
      */
@@ -139,7 +164,7 @@ class AddItemFragment : Fragment() {
                 this.navigationArgs.itemId,
                 this.binding.itemName.text.toString(),
                 this.binding.itemDesc.text.toString(),
-                this.binding.itemDate.text.toString()
+                this.getDateInMillis()
             )
             val action = AddItemFragmentDirections.actionAddItemFragmentToItemListFragment()
             findNavController().navigate(action)

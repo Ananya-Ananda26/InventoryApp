@@ -15,9 +15,9 @@
  */
 package com.example.inventory.data
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import java.sql.Date
+import java.util.*
 
 /**
  * Entity data class represents a single row in the database.
@@ -31,10 +31,23 @@ data class Item(
     @ColumnInfo(name = "desc")
     val itemDesc: String,
     @ColumnInfo(name = "date")
-    val itemDate: String,
+    val itemDate: Long,
 )
 /**
  * Returns the passed in price in currency format.
  */
 //fun Item.getFormattedPrice(): String =
 //    NumberFormat.getCurrencyInstance().format(itemDesc)
+//
+//class DateConverter {
+//
+//    @TypeConverter
+//    fun toDate(timestamp: Long): Date {
+//        return Date(timestamp)
+//    }
+//
+//    @TypeConverter
+//    fun toTimestamp(date: Date): Long {
+//        return date.time
+//    }
+//}

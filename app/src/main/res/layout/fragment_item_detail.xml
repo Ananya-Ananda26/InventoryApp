@@ -111,6 +111,7 @@
         android:id="@+id/edit_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tooltipText ="Edit task"
         android:layout_marginEnd="@dimen/margin_between_elements"
         android:layout_marginBottom="@dimen/margin_between_elements"
         android:contentDescription="@string/edit_item"

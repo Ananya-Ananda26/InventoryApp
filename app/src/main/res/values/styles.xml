@@ -18,6 +18,9 @@
 
     <style name="WelcomeErrorAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@android:color/holo_red_dark</item>
+        <item name="android:background">@android:color/darker_gray</item>
+<!--        <item name="android:boxStrokErrorColor">@android:color/holo_red_dark</item>-->
+<!--        boxStrokeErrorColor-->
     </style>
 
     <style name="Widget.Inventory.ListItemTextView" parent="Widget.MaterialComponents.TextView">

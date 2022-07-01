@@ -29,6 +29,7 @@ import com.example.inventory.data.Item
 //import com.example.inventory.data.getFormattedPrice
 import com.example.inventory.databinding.FragmentItemDetailBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.SimpleDateFormat
 
 /**
  * [ItemDetailFragment] displays the details of the selected item.
@@ -62,10 +63,17 @@ class ItemDetailFragment : Fragment() {
         binding.apply {
             itemName.text = item.itemName
             itemDesc.text = item.itemDesc
-            itemDate.text = item.itemDate
+            itemDate.text = formatDate(item.itemDate)
             deleteItem.setOnClickListener { showConfirmationDialog() }
             editItem.setOnClickListener { editItem() }
         }
+    }
+    private fun formatDate(millis : Long): String{
+        val simpleDateFormat = SimpleDateFormat("MM/dd")
+        val dateString = simpleDateFormat.format(millis)
+        Log.d("Debug", String.format("Date format: %s", dateString))
+        return dateString
+
     }
 
     /**

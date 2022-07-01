@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin"
             android:hint="@string/item_name_req"
+            app:errorTextAppearance="@style/WelcomeErrorAppearance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -57,38 +58,42 @@
                 android:id="@+id/item_desc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:inputType="textMultiLine"
+                android:singleLine="true"
+                android:inputType="textLongMessage"
+                app:errorTextAppearance="@style/WelcomeErrorAppearance"
                  />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/item_date_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin"
-            android:hint="@string/quantity_req"
-            app:counterEnabled="true"
-            app:counterMaxLength="8"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_desc_label">
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/item_date_label"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="@dimen/margin"-->
+<!--            android:hint="@string/quantity_req"-->
+<!--            app:counterEnabled="true"-->
+<!--            app:counterMaxLength="8"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/item_desc_label">-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/item_date"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text|date"
-                android:singleLine="true"
-                app:counterMaxLength="8"
-                app:errorTextAppearance="@style/WelcomeErrorAppearance" />
-        </com.google.android.material.textfield.TextInputLayout>
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/item_date"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:inputType="text|date"-->
+<!--                android:singleLine="true"-->
+<!--                app:counterMaxLength="8"-->
+<!--                app:errorTextAppearance="@style/WelcomeErrorAppearance" />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <DatePicker
             android:id="@+id/date_Picker"
-            android:layout_width="292dp"
-            android:layout_height="383dp"
+            android:layout_width="337dp"
+            android:layout_height="380dp"
+            android:layout_marginTop="4dp"
+            android:scaleX="0.90"
+            android:scaleY="0.90"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_desc_label" />
 
@@ -96,7 +101,7 @@
             android:id="@+id/save_action"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:text="@string/save_action"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

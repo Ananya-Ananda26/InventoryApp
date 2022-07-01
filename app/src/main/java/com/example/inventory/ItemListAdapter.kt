@@ -15,6 +15,7 @@
  */
 package com.example.inventory
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +23,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inventory.data.Item
 import com.example.inventory.databinding.ItemListItemBinding
+import java.text.SimpleDateFormat
 
 /**
  * [ListAdapter] implementation for the recyclerview.
@@ -48,13 +50,20 @@ class ItemListAdapter(private val onItemClicked: (Item) -> Unit) :
         holder.bind(current)
     }
 
+
     class ItemViewHolder(private var binding: ItemListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private fun formatDate(millis : Long): String{
+            val simpleDateFormat = SimpleDateFormat("MM/dd")
+            val dateString = simpleDateFormat.format(millis)
+            Log.d("Debug", String.format("Date format: %s", dateString))
+            return dateString
 
+        }
         fun bind(item: Item) {
             binding.itemName.text = item.itemName
             binding.itemDesc.text = item.itemDesc
-            binding.itemDate.text = item.itemDate
+            binding.itemDate.text = formatDate(item.itemDate)
         }
     }
 
